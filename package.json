@@ -1,0 +1,11 @@
+{
+  "name": "riot-seed-flux",
+  "version": "0.1.3",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "riot": "2.3.11"
+  },
+  "author": "xieyu33333",
+  "license": "ISC"
+}
