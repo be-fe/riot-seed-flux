@@ -18,6 +18,7 @@ var riot = require('riot');
         },
 
         clone: function (parent, child) {
+            var defaultWrapper = (toString.call(parent) === '[object Array]') ? [] : {};
             var child = child || defaultWrapper;
             for (var i in parent) {
                 if (toString.call(parent[i]) === '[object Object]') {
