@@ -43,7 +43,7 @@ var riot = require('riot');
         isObject: utils.isType('Object'),
         isFunction: utils.isType('Function'),
         isElement: function (obj) {
-            return toString.call(obj).indexOf('Element') !== -1;
+            return Object.prototype.toString.call(obj).indexOf('Element') !== -1;
         }
     });
 
@@ -101,6 +101,9 @@ var riot = require('riot');
             options.error && options.error(err);
         };
 
+        store.on('complete', onComplete);
+        store.on('error', onError);
+
         if (store.data && store.status === 'complete') {
             if (refresh !== true) {
                 self[property] = store.data;
@@ -116,8 +119,6 @@ var riot = require('riot');
                 flux.update(store, params);
             }
         }
-        store.on('complete', onComplete);
-        store.on('error', onError);
     };
 
     flux.update = function(store, params) {
