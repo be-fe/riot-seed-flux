@@ -103,6 +103,9 @@ var riot = require('riot');
 
         store.on('complete', onComplete);
         store.on('error', onError);
+        self.on('unmount', function(){
+            store.off('complete', onComplete);
+        });
 
         if (store.data && store.status === 'complete') {
             if (refresh !== true) {
