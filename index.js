@@ -105,6 +105,7 @@ var riot = require('riot');
         store.on('error', onError);
         self.on('unmount', function(){
             store.off('complete', onComplete);
+            store.off('error', onError);
         });
 
         if (store.data && store.status === 'complete') {
