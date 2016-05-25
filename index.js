@@ -1,7 +1,7 @@
 var riot = require('riot');
 
 (function(global, riot) {
-    var flux = {};
+    var flux = { config: {} };
     var utils =  {
         extend: function(src, obj) {
             for (var key in obj) {
@@ -61,9 +61,23 @@ var riot = require('riot');
         var self = this;
         var store = options.store;
         var property = options.name || options.property;
-        var refresh = options.refresh;
+        
         var params = options.params;
-        var clone = options.clone === undefined ? true : options.clone;
+        var refresh, clone;
+
+        if (flux.config.refresh) {
+            refresh = options.refresh === undefined ? true : options.refresh;
+        }
+        else {
+            refresh = options.refresh;
+        }
+
+        if (flux.config.noClone) {
+            clone = options.clone
+        }
+        else {
+            clone = options.clone === undefined ? true : options.clone;
+        }
 
         var judgeBinded = function(result) {
             if (!store.judge) {
@@ -105,7 +119,6 @@ var riot = require('riot');
         store.on('error', onError);
         self.on('unmount', function(){
             store.off('complete', onComplete);
-            store.off('error', onError);
         });
 
         if (store.data && store.status === 'complete') {
