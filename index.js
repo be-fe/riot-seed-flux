@@ -34,6 +34,42 @@ var riot = require('riot');
                 }
             }
             return child;
+        },
+
+        isEqual: function(x, y) {
+            if (!x && !y) {
+                return true;
+            }
+
+            if (typeof x !== typeof y) {
+                return false;
+            }
+
+            if (typeof x === 'string' || typeof x === 'number') {
+                if (x !== y) {
+                    return false
+                }
+            }
+
+            if (typeof x === 'object') {
+                for ( var i in x ) {
+                    if ( ! x.hasOwnProperty(i) ) continue;
+
+                    if ( ! y.hasOwnProperty(i) ) return false;
+
+                    if ( x[i] === y[i] ) continue;
+
+                    if ( typeof( x[i] ) !== "object" ) return false;
+
+                    if ( ! Object.equals(x[i],  y[i] ) ) return false;
+                }
+
+                for ( var p in y ) {
+                    if ( y.hasOwnProperty(p) && ! x.hasOwnProperty( p ) ) return false;
+                }
+            }
+
+            return true
         }
     };
 
@@ -71,6 +107,9 @@ var riot = require('riot');
         else {
             refresh = options.refresh;
         }
+        if (!refresh && !isEquel(params, store.params)) {
+            refresh = true; //参数不同的时候一定重刷
+        }
 
         if (flux.config.noClone) {
             clone = options.clone
@@ -78,6 +117,8 @@ var riot = require('riot');
         else {
             clone = options.clone === undefined ? true : options.clone;
         }
+
+        store.params = params; //比较完成后进行赋值
 
         var judgeBinded = function(result) {
             if (!store.judge) {
