@@ -18,14 +18,14 @@ var riot = require('riot');
         },
 
         clone: function (parent, child) {
-            var defaultWrapper = (toString.call(parent) === '[object Array]') ? [] : {};
+            var defaultWrapper = this.isArray(parent) ? [] : {};
             var child = child || defaultWrapper;
             for (var i in parent) {
-                if (toString.call(parent[i]) === '[object Object]') {
+                if (this.isObject(parent[i])) {
                     child[i] = {};
                     this.clone(parent[i], child[i]);
                 }
-                else if (toString.call(parent[i]) === '[object Array]') {
+                else if (this.isArray(parent[i])) {
                     child[i] = [];
                     this.clone(parent[i], child[i]);
                 } 
@@ -107,7 +107,7 @@ var riot = require('riot');
         else {
             refresh = options.refresh;
         }
-        if (!refresh && !isEquel(params, store.params)) {
+        if (!refresh && !utils.isEqual(params, store.params)) {
             refresh = true; //参数不同的时候一定重刷
         }
 
